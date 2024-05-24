@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+
+import { useState } from "react";
+import axios from "axios"
+import {  useNavigate } from "react-router-dom";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const navigate=useNavigate()
+  const [user,setuser]=useState()
+  const [pass,setpass]=useState()
+  function handleuser(evt){
+    setuser(evt.target.value)
+  }
+  function handlepass(evt){
+    setpass(evt.target.value)
+  }
+  function check(){
+    var logindetails=axios.post("http://localhost:5005/login",{"username":user,"password":pass})
+    logindetails.then(function(data){
+      if(data.data===true){
+        console.log(data)
+        navigate("/success")}
+        else{
+          navigate("/fail")
+        }
+      
+    })
+  }    
+  return (<div>
+    <input placeholder="username" name="username" onChange={handleuser}></input>
+    <input placeholder="password" name="password" onChange={handlepass}></input>
+    <button onClick={check}>Login</button></div>
+  )
 }
+  
 
 export default App;
